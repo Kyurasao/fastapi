@@ -14,6 +14,11 @@ class ItemName(str, Enum):
     three = "three"
 
 
+class LenValue(str, Enum):
+    short = "short"
+    long = "long"
+
+
 @app.get("/items/")
 async def read_item(skip: int = 0, limit: int = 10):
     return fake_items_db[skip: skip + limit]
@@ -53,17 +58,18 @@ async def read_user_item(item_id: str, needy: str):
 
 @app.get("/items_all/{item_id}")
 async def read_user_item(
-        # num: ItemName,
         item_id: ItemName,
         needy: str,
         skip: int = 0,
         limit: Union[int, None] = None,
+        lenn: Union[LenValue, None] = None,
 ):
     item = {
-        # "item_id": item_id,
         "needy": needy,
         "skip": skip,
-        "limit": limit}
+        "limit": limit,
+        "lenn": lenn,
+    }
     if item_id.value == "one":
         item.update({"item_id": item_id, "message": "This is one!"})
     else:

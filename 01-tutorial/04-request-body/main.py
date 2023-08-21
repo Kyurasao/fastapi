@@ -1,8 +1,8 @@
 from typing import Union
 
-import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
+import uvicorn
 
 
 class Item(BaseModel):
@@ -24,23 +24,13 @@ async def create_item(item: Item):
     return item_dict
 
 
-# @app.put("/items/{item_id}")
-# async def create_item(item_id: int, item: Item):
-#     return {"item_id": item_id, **item.model_dump()}
-
-
 @app.put("/items/{item_id}")
-async def create_item(item_id: int, item: Item, q: Union[str, None] = None):
+async def create_item(item: Item, item_id: int, q: Union[str, None] = None):
     result = {"item_id": item_id, **item.model_dump()}
     if q:
         result.update({"q": q})
-
     return result
 
 
 if __name__ == "__main__":
-    uvicorn.run(
-        "01-tutorial.04-request-body.main:app",
-        host="0.0.0.0",
-        port=80
-    )
+    uvicorn.run("main:app", host="0.0.0.0", port=80)

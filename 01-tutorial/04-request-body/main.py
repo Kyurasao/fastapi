@@ -1,8 +1,8 @@
 from typing import Union
 
+import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
-import uvicorn
 
 
 class Item(BaseModel):

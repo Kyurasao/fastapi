@@ -118,6 +118,7 @@ async def read_items(q: Annotated[Union[str, None], Query(alias="item-query")] =
 
 
 @app.get("/items_13/")
+# для отображения в документации
 async def read_items(
     q: Annotated[
         Union[str, None],
@@ -136,6 +137,17 @@ async def read_items(
     if q:
         results.update({"q": q})
     return results
+
+
+@app.get("/items_14/")
+# для исключения query-параметра из генерируемой OpenAPI схемы (а также из системы автоматической генерации документации)
+async def read_items(
+    hidden_query: Annotated[Union[str, None], Query(alias="item-query", include_in_schema=False)] = None
+):
+    if hidden_query:
+        return {"hidden_query": hidden_query}
+    else:
+        return {"hidden_query": "Not found"}
 
 
 if __name__ == "__main__":

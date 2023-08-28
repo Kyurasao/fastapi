@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Annotated
 
 import uvicorn
 from fastapi import FastAPI, Body
@@ -31,7 +31,19 @@ class Offer(BaseModel):
 
 
 @app.put("/items/{item_id}")
-async def update_item(item_id: int, item: Item): #  = Body(emded=True)
+async def update_item(item_id: int, item: Item):
+    results = {"item_id": item_id, "item": item}
+    return results
+
+
+@app.put("/items_1/{item_id}")
+async def update_item(item_id: int, item: Item = Body(embed=True)):
+    results = {"item_id": item_id, "item": item}
+    return results
+
+
+@app.put("/items_2/{item_id}")
+async def update_item(item_id: int, item: Annotated[Item, Body(embed=True)]):
     results = {"item_id": item_id, "item": item}
     return results
 
@@ -39,6 +51,18 @@ async def update_item(item_id: int, item: Item): #  = Body(emded=True)
 @app.post("/offers/")
 async def create_offer(offer: Offer):
     return offer
+
+
+@app.post("/images/multiple/")
+async def create_multiple_images(images: list[Image]):
+    for image in images:
+        image.url_1 += "_@"
+    return images
+
+
+@app.post("/index-weights/")
+async def create_index_weights(weights: dict[int, float]):
+    return weights
 
 
 if __name__ == "__main__":
